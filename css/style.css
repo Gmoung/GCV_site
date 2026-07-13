@@ -425,6 +425,36 @@ body {
   font-weight: 400;
 }
 
+/* Sealed door — a room that isn't open yet. Same door image and title,
+   but there is nothing to click: a teaser line stands in for the entry
+   link, and the invitational hover motion is switched off so the door
+   doesn't promise an entrance it can't deliver. */
+
+.door--sealed { cursor: default; }
+
+.door--sealed .door__media {
+  filter: brightness(.6) saturate(.75);
+}
+
+.door--sealed:hover .door__media,
+.door--sealed:focus-visible .door__media {
+  filter: brightness(.6) saturate(.75);
+  transform: none;
+}
+
+.door--sealed:hover .door__label,
+.door--sealed:focus-visible .door__label {
+  transform: none;
+}
+
+.door__teaser {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: .95rem;
+  color: var(--ink-faint);
+  max-width: 34ch;
+}
+
 /* ---- Room panels (shared template for every collection page) --------------- */
 
 .room-panels {

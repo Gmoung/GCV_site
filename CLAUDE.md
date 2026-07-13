@@ -105,6 +105,34 @@ images/                  empty — real photography goes here
 netlify.toml             publish = "." (no build step needed)
 ```
 
+## Sealed doors (rooms not open yet)
+
+A room that doesn't have a finished page yet still gets a door in
+`gallery.html`, but as a **sealed door**: same door image, title, and
+kicker, but no link and no hover invitation. Use `<div class="door
+door--sealed reveal">` instead of `<a class="door ...">` (no `href`, no
+`transition-link`, no `data-veil-*`), and add a `.door__teaser` line
+after the title in place of whatever an open door doesn't need:
+
+```html
+<div class="door door--sealed reveal" style="--door-1:...; --door-2:...; --accent:...;">
+  <span class="door__media" aria-hidden="true"></span>
+  <span class="scrim scrim--bottom" aria-hidden="true"></span>
+  <span class="door__label">
+    <span class="door__kicker">Whisky Woven</span>
+    <span class="door__title display">Room Title</span>
+    <span class="door__teaser">A short in-world line standing in for the entry link.</span>
+  </span>
+</div>
+```
+
+`.door--sealed` dims and desaturates the placeholder image and disables
+the hover brighten/lift so the door doesn't promise an entrance it can't
+deliver yet. When the room's page is finished, swap the `<div>` back to
+an `<a class="door reveal transition-link">` with `href` and
+`data-veil-1` / `data-veil-2`, drop `door--sealed` and `.door__teaser`,
+and it becomes a normal open door.
+
 ## Adding a new room
 
 1. Copy an existing file in `/rooms` as a starting point.
