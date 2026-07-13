@@ -1,0 +1,604 @@
+/* ==========================================================================
+   Ginger's Creative Ventures — base stylesheet
+   A house of worlds. Full-bleed rooms, quiet chrome, slow motion.
+   See CLAUDE.md for the design rules this file implements.
+   ========================================================================== */
+
+/* ---- Reset -------------------------------------------------------------- */
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+}
+
+body {
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+img, svg { display: block; max-width: 100%; }
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+h1, h2, h3, p { margin: 0; }
+
+ul { list-style: none; margin: 0; padding: 0; }
+
+button {
+  font: inherit;
+  color: inherit;
+  background: none;
+  border: 0;
+  cursor: pointer;
+}
+
+/* ---- Design tokens -------------------------------------------------------
+   Every room overrides --room-1 / --room-2 / --accent (see rooms below or
+   the inline style on a page's <body>). These are the "house" defaults —
+   used on the homepage, the hall, and the connective pages. --veil-1 /
+   --veil-2 default to the current room's colors unless a link specifies
+   the destination room's colors, so the transition dissolves toward
+   wherever you're headed.
+   -------------------------------------------------------------------------- */
+
+:root {
+  --font-display: 'Fraunces', Georgia, 'Times New Roman', serif;
+  --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+
+  --ease: cubic-bezier(.22, .61, .36, 1);
+  --dur-fast: .35s;
+  --dur-medium: .9s;
+  --dur-slow: 1.6s;
+
+  --room-1: #0a0a0a;
+  --room-2: #1a1712;
+  --accent: #cbb98a;
+
+  --ink: #f4f1ea;
+  --ink-dim: rgba(244, 241, 234, .68);
+  --ink-faint: rgba(244, 241, 234, .42);
+}
+
+body {
+  background: var(--room-1);
+  color: var(--ink);
+  font-family: var(--font-sans);
+}
+
+/* ---- Typography ----------------------------------------------------------- */
+
+.display {
+  font-family: var(--font-display);
+  font-weight: 400;
+  letter-spacing: .01em;
+  line-height: 1.05;
+}
+
+.kicker {
+  font-family: var(--font-sans);
+  font-size: .72rem;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  color: var(--ink-dim);
+}
+
+/* ---- Quiet chrome (persistent nav, everywhere except the homepage) ------- */
+
+.chrome {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 500;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: clamp(1rem, 3vw, 2rem) clamp(1.25rem, 4vw, 3rem);
+  pointer-events: none;
+}
+
+.chrome__mark {
+  font-family: var(--font-display);
+  font-size: .95rem;
+  letter-spacing: .04em;
+  color: var(--ink-dim);
+  opacity: .8;
+  transition: opacity var(--dur-fast) var(--ease);
+  pointer-events: auto;
+}
+
+.chrome__mark:hover { opacity: 1; }
+
+.chrome__links {
+  display: flex;
+  gap: clamp(1rem, 2vw, 1.75rem);
+  font-size: .78rem;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+
+.chrome__links a {
+  opacity: .68;
+  pointer-events: auto;
+  transition: opacity var(--dur-fast) var(--ease);
+  padding: .25em 0;
+}
+
+.chrome__links a:hover,
+.chrome__links a[aria-current="page"] { opacity: 1; }
+
+/* A single quiet link, used on the homepage where a full chrome bar
+   would read as a nav — this is one door, not a menu. */
+
+.quiet-link--corner {
+  position: fixed;
+  bottom: clamp(1.25rem, 4vw, 2.5rem);
+  right: clamp(1.25rem, 4vw, 2.5rem);
+  z-index: 500;
+  font-size: .78rem;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  opacity: .55;
+  transition: opacity var(--dur-fast) var(--ease);
+}
+
+.quiet-link--corner:hover { opacity: 1; }
+
+/* ---- Scrim -----------------------------------------------------------------
+   A soft gradient sits behind any text that overlays imagery. Never solid,
+   never a box — just enough density to keep type readable. */
+
+.scrim {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.scrim--bottom {
+  background: linear-gradient(
+    to top,
+    rgba(0, 0, 0, .72) 0%,
+    rgba(0, 0, 0, .38) 28%,
+    rgba(0, 0, 0, 0) 62%
+  );
+}
+
+.scrim--full {
+  background: radial-gradient(
+    120% 90% at 50% 65%,
+    rgba(0, 0, 0, .55) 0%,
+    rgba(0, 0, 0, .15) 55%,
+    rgba(0, 0, 0, .05) 100%
+  );
+}
+
+/* ---- Full-viewport media block --------------------------------------------
+   The placeholder gradient standing in for a photograph. Swap to a real
+   image later by adding background-image to the element's inline style —
+   see CLAUDE.md "Swapping in real images". */
+
+.media {
+  position: absolute;
+  inset: -4%;
+  background: radial-gradient(120% 120% at 28% 18%, var(--panel-2, var(--room-2)), var(--panel-1, var(--room-1)) 72%);
+  animation: kenburns 26s var(--ease) infinite alternate;
+  will-change: transform;
+}
+
+@keyframes kenburns {
+  from { transform: scale(1) translate3d(0, 0, 0); }
+  to   { transform: scale(1.09) translate3d(-1%, -1%, 0); }
+}
+
+/* Alternate placeholder gradient position, so consecutive panels in a
+   room read as distinct frames rather than a repeated tile. Purely a
+   placeholder concern — once real photographs are in place this class
+   can be dropped along with .media's background-image swap. */
+
+.media--pos-b {
+  background: radial-gradient(120% 120% at 74% 80%, var(--panel-2, var(--room-2)), var(--panel-1, var(--room-1)) 72%);
+}
+
+/* ---- Reveal on scroll ------------------------------------------------------ */
+
+.reveal {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity var(--dur-slow) var(--ease), transform var(--dur-slow) var(--ease);
+}
+
+.reveal.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ---- Transition veil -------------------------------------------------------
+   One element, present on every page. It covers the screen on load and
+   fades away to reveal the room; clicking a "transition-link" reverses it
+   and carries you to the next page. This is the "camera move" between
+   worlds — see CLAUDE.md "Motion" for the full explanation. */
+
+.veil {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  pointer-events: none;
+  opacity: 1;
+  transform: scale(1.06);
+  background: radial-gradient(120% 120% at 50% 50%, var(--veil-2, var(--room-2)), var(--veil-1, var(--room-1)));
+  transition: opacity var(--dur-medium) var(--ease), transform calc(var(--dur-medium) * 1.3) var(--ease);
+}
+
+.veil.is-hidden {
+  opacity: 0;
+  transform: scale(1);
+}
+
+.veil.is-covering {
+  opacity: 1;
+  transform: scale(1.06);
+  pointer-events: auto;
+}
+
+/* ---- Hero (homepage) -------------------------------------------------------- */
+
+.hero {
+  position: relative;
+  height: 100vh;
+  height: 100svh;
+  overflow: hidden;
+}
+
+.hero__content {
+  position: relative;
+  z-index: 2;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 1.25rem;
+  padding: 0 1.5rem;
+}
+
+.hero__mark {
+  font-family: var(--font-display);
+  font-weight: 300;
+  font-size: clamp(1rem, 1.6vw, 1.35rem);
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--ink-dim);
+}
+
+.hero__tagline {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-weight: 400;
+  font-size: clamp(1.15rem, 2.4vw, 1.6rem);
+  color: var(--ink);
+  max-width: 32ch;
+}
+
+.hero__enter {
+  margin-top: 1rem;
+  font-size: .82rem;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: var(--accent);
+  display: inline-flex;
+  align-items: center;
+  gap: .6em;
+  padding-bottom: .3em;
+  border-bottom: 1px solid rgba(255, 255, 255, .25);
+  transition: border-color var(--dur-fast) var(--ease), letter-spacing var(--dur-fast) var(--ease), gap var(--dur-fast) var(--ease);
+}
+
+.hero__enter:hover {
+  border-color: var(--accent);
+  gap: .9em;
+}
+
+.hero__enter-glyph {
+  transition: transform var(--dur-fast) var(--ease);
+}
+
+.hero__enter:hover .hero__enter-glyph {
+  transform: translateX(3px);
+}
+
+/* ---- Gallery index (the hall of doors) -------------------------------------- */
+
+.gallery-intro {
+  position: relative;
+  z-index: 2;
+  min-height: 46vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 1rem;
+  padding: 8rem 1.5rem 3rem;
+}
+
+.gallery-intro__title {
+  font-size: clamp(2.2rem, 6vw, 4rem);
+  font-weight: 400;
+}
+
+.gallery-intro__text {
+  font-family: var(--font-display);
+  font-style: italic;
+  color: var(--ink-dim);
+  font-size: clamp(1rem, 1.6vw, 1.2rem);
+  max-width: 40ch;
+}
+
+.wing {
+  position: relative;
+}
+
+.wing__heading {
+  position: relative;
+  z-index: 2;
+  padding: 5rem 1.5rem 2.5rem;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: .6rem;
+}
+
+.wing__title {
+  font-size: clamp(1.6rem, 4vw, 2.4rem);
+  font-weight: 400;
+}
+
+.wing__intro {
+  font-family: var(--font-display);
+  font-style: italic;
+  color: var(--ink-dim);
+  font-size: 1.05rem;
+}
+
+.doors {
+  display: flex;
+  flex-direction: column;
+}
+
+.door {
+  position: relative;
+  display: block;
+  height: 92vh;
+  height: 92svh;
+  overflow: hidden;
+}
+
+.door__media {
+  position: absolute;
+  inset: -4%;
+  background: radial-gradient(120% 120% at 30% 22%, var(--door-2, var(--room-2)), var(--door-1, var(--room-1)) 72%);
+  animation: kenburns 30s var(--ease) infinite alternate;
+  filter: brightness(.88);
+  transition: filter var(--dur-medium) var(--ease), transform var(--dur-medium) var(--ease);
+}
+
+.door:hover .door__media,
+.door:focus-visible .door__media {
+  filter: brightness(1.05);
+  transform: scale(1.03);
+}
+
+.door__label {
+  position: absolute;
+  z-index: 2;
+  left: clamp(1.5rem, 5vw, 4rem);
+  bottom: clamp(2rem, 6vw, 4rem);
+  display: flex;
+  flex-direction: column;
+  gap: .5rem;
+  transition: transform var(--dur-medium) var(--ease);
+}
+
+.door:hover .door__label,
+.door:focus-visible .door__label {
+  transform: translateY(-.4rem);
+}
+
+.door__kicker {
+  font-size: .74rem;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  color: var(--accent, var(--ink-dim));
+}
+
+.door__title {
+  font-family: var(--font-display);
+  font-size: clamp(1.8rem, 5vw, 3.2rem);
+  font-weight: 400;
+}
+
+/* ---- Room panels (shared template for every collection page) --------------- */
+
+.room-panels {
+  scroll-snap-type: y proximity;
+}
+
+.panel {
+  position: relative;
+  height: 100vh;
+  height: 100svh;
+  overflow: hidden;
+  scroll-snap-align: start;
+  display: flex;
+  align-items: flex-end;
+}
+
+.panel__caption {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  padding: 0 clamp(1.5rem, 6vw, 5rem) clamp(3rem, 8vw, 6rem);
+  display: flex;
+  flex-direction: column;
+  gap: .75rem;
+}
+
+.panel--caption-right .panel__caption { align-items: flex-end; text-align: right; }
+.panel--caption-center .panel__caption { align-items: center; text-align: center; }
+
+.panel__index {
+  font-size: .72rem;
+  letter-spacing: .18em;
+  color: var(--ink-faint);
+}
+
+.panel__text {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: clamp(1.05rem, 2vw, 1.4rem);
+  max-width: 46ch;
+  color: var(--ink);
+}
+
+/* Title panel — the room's own cinematic title card. */
+
+.panel--title {
+  align-items: center;
+  justify-content: center;
+}
+
+.panel--title .panel__caption {
+  align-items: center;
+  text-align: center;
+  padding-bottom: 0;
+  gap: 1.1rem;
+}
+
+.panel--title .panel__kicker {
+  font-size: .78rem;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+.panel--title .panel__title {
+  font-size: clamp(2.4rem, 7vw, 5rem);
+  font-weight: 400;
+}
+
+.panel--title .panel__text {
+  color: var(--ink-dim);
+}
+
+/* Closing panel — a way back out, and a way further in. */
+
+.panel--closing {
+  align-items: center;
+  justify-content: center;
+}
+
+.panel--closing .panel__caption {
+  align-items: center;
+  text-align: center;
+}
+
+.panel__closing-links {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1rem 2.5rem;
+  margin-top: 1rem;
+}
+
+.panel__closing-links a {
+  font-size: .82rem;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--accent);
+  padding-bottom: .3em;
+  border-bottom: 1px solid rgba(255, 255, 255, .25);
+  transition: border-color var(--dur-fast) var(--ease);
+}
+
+.panel__closing-links a:hover { border-color: var(--accent); }
+
+/* ---- Simple content pages (artist, commissions) ----------------------------- */
+
+.page-panel {
+  position: relative;
+  min-height: 100vh;
+  min-height: 100svh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.page-panel__content {
+  position: relative;
+  z-index: 2;
+  max-width: 52ch;
+  text-align: center;
+  padding: 8rem 1.75rem 4rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.page-panel__title {
+  font-size: clamp(2rem, 5vw, 3.2rem);
+  font-weight: 400;
+}
+
+.page-panel__body {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: clamp(1.05rem, 1.8vw, 1.25rem);
+  color: var(--ink-dim);
+  line-height: 1.6;
+}
+
+.page-panel__link {
+  margin-top: .5rem;
+  font-size: .82rem;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--accent);
+  padding-bottom: .3em;
+  border-bottom: 1px solid rgba(255, 255, 255, .25);
+  transition: border-color var(--dur-fast) var(--ease);
+}
+
+.page-panel__link:hover { border-color: var(--accent); }
+
+/* ---- Motion sensitivity ------------------------------------------------------ */
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .media, .door__media { animation: none !important; }
+
+  .room-panels { scroll-snap-type: none; }
+}
+
+/* ---- Small screens ------------------------------------------------------------ */
+
+@media (max-width: 640px) {
+  .door { height: 78vh; height: 78svh; }
+  .chrome { flex-direction: row; }
+  .chrome__links { gap: 1rem; }
+}
