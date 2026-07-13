@@ -23,6 +23,15 @@ through a door. This shapes both the structure and the writing:
   homepage (which gets a single small corner link instead of a nav bar),
   plus a short **Artist** page.
 
+## Client confidentiality
+
+`rooms/fantasy-app-suite.html` shows work made under an NDA for an
+unreleased app. **Never write the real product/company name anywhere in
+this repo** — not in the page title, copy, alt text, filenames, commit
+messages, or code comments. Refer to it only as "Client Work — Fantasy
+App Suite" or similar generic language. Images may be shown per the
+agreement with the client; the name may not.
+
 ## Design rules
 
 These are load-bearing. Keep new pages consistent with them.
@@ -54,7 +63,7 @@ These are load-bearing. Keep new pages consistent with them.
    | Sloan and the Hollow Prince | `#070c0a` | `#123128` | `#5fcf9f` |
    | Victor and Sophia | `#0d0708` | `#3a0f1e` | `#d9668c` |
    | Peace of Mind | `#12161c` | `#324153` | `#a8d8ff` |
-   | URGE | `#1c1224` | `#5b2f73` | `#ff9fd0` |
+   | Client Work — Fantasy App Suite | `#1c1224` | `#5b2f73` | `#ff9fd0` |
 
 5. **Motion**, all defined in `css/style.css`:
    - Slow, near-imperceptible Ken Burns drift on every image panel
@@ -97,7 +106,7 @@ rooms/
   sloan-and-the-hollow-prince.html Whisky Woven
   victor-and-sophia.html           Whisky Woven
   peace-of-mind.html               Commissioned Worlds
-  urge.html                        Commissioned Worlds
+  fantasy-app-suite.html           Commissioned Worlds (client work — real app name withheld under NDA)
 css/style.css            everything — tokens, layout, motion, components
 js/main.js               scroll reveal (IntersectionObserver)
 js/transitions.js        the veil / room-entry transition
