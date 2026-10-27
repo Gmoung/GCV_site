@@ -63,7 +63,7 @@ These are load-bearing. Keep new pages consistent with them.
    | Sloan and the Hollow Prince | `#070c0a` | `#123128` | `#5fcf9f` |
    | Victor and Sophia | `#0d0708` | `#3a0f1e` | `#d9668c` |
    | Peace of Mind | `#12161c` | `#324153` | `#a8d8ff` |
-   | Client Work — Fantasy App Suite | `#1c1224` | `#5b2f73` | `#ff9fd0` |
+   | Client Work — Fantasy App Suite | `#180f1a` | `#4a2f4a` | `#d9a8c2` |
 
 5. **Motion**, all defined in `css/style.css`:
    - Slow, near-imperceptible Ken Burns drift on every image panel
@@ -174,6 +174,40 @@ The gradient stays as a `background` fallback underneath since
 still works on a real photo. Once photos are in for a room, you can drop
 that room's `.media--pos-b` placeholder-variety class if it looks better
 without it.
+
+## Video panels
+
+A panel can hold a YouTube embed instead of an image — see
+`rooms/fantasy-app-suite.html`'s sample panel for the pattern:
+
+```html
+<section class="panel panel--video reveal">
+  <div class="panel__video-fill" aria-hidden="false">
+    <iframe
+      src="https://www.youtube-nocookie.com/embed/VIDEO_ID"
+      title="A short, real title for this video"
+      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+      referrerpolicy="strict-origin-when-cross-origin"
+      allowfullscreen></iframe>
+  </div>
+  <div class="scrim scrim--bottom" aria-hidden="true"></div>
+  <div class="panel__caption">
+    <p class="panel__text">A caption for this video.</p>
+  </div>
+</section>
+```
+
+Use `youtube-nocookie.com/embed/<id>` (the privacy-enhanced embed domain),
+where `<id>` is the part of a `youtu.be/<id>` link before any `?si=...`
+tracking parameter. `.panel__video-fill` scales and crops the video to
+fill the full viewport edge-to-edge, the same full-bleed treatment every
+other panel gets — it does not letterbox. If a video's framing needs to
+stay intact instead of being cropped, that's the one thing to change:
+replace `.panel__video-fill`'s rules in `css/style.css` with a centered,
+`max-width`-constrained, `aspect-ratio: 16/9` box instead of the
+cover-fill trick. No autoplay is set, so the video only plays if the
+visitor clicks it — this also sidesteps any `prefers-reduced-motion`
+concern for video panels.
 
 ## Content placeholders
 

@@ -560,6 +560,33 @@ body {
 
 .panel__closing-links a:hover { border-color: var(--accent); }
 
+/* Video panel — a YouTube embed standing in for an image panel. Same
+   full-bleed, edge-to-edge treatment as every other panel: the iframe is
+   scaled and cropped to cover the viewport (same trick as a CSS
+   background-video), not letterboxed. If a video's framing matters more
+   than filling the screen, swap `.panel__video-fill` for a centered,
+   non-cropped layout instead — see CLAUDE.md "Video panels". */
+
+.panel--video { background: var(--room-1); }
+
+.panel__video-fill {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+
+.panel__video-fill iframe {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 100vw;
+  height: 56.25vw;
+  min-height: 100vh;
+  min-width: 177.78vh;
+  transform: translate(-50%, -50%);
+  border: 0;
+}
+
 /* ---- Simple content pages (artist, commissions) ----------------------------- */
 
 .page-panel {
