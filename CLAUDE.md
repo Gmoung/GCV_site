@@ -52,13 +52,18 @@ These are load-bearing. Keep new pages consistent with them.
    `/rooms`). Crossing into a room shifts the site's ambient color.
    Whisky Woven rooms run dark and moody; Commissioned Worlds rooms run
    cinematic but lighter. The "house" pages (home, hall, commissions,
-   artist) use the default warm-neutral tokens in `:root`. Current
-   palette:
+   artist) use the default tokens in `:root`, whose `--accent` is the
+   studio's own brand color — **teal blue (`#3fb6c4`)**, not room-specific.
+   Keep that teal for anything that represents the studio itself rather
+   than a collection: the homepage "Step inside" link, the
+   commissions/artist page links, and any future house-level chrome.
+   Individual rooms keep their own accents per the table below; don't
+   pull house teal into a room's palette unless asked. Current palette:
 
    | Room | room-1 | room-2 | accent |
    |---|---|---|---|
-   | House (default) | `#0a0a0a` | `#1a1712` | `#cbb98a` |
-   | Hall / commissions / artist ambient | `#0e0d0c` | `#221f1a` | `#cbb98a` |
+   | House (default) | `#0a0a0a` | `#1a1712` | `#3fb6c4` |
+   | Hall / commissions / artist ambient | `#0e0d0c` | `#221f1a` | `#3fb6c4` |
    | Shadow Court Stranger | `#0a0810` | `#241633` | `#b48be0` |
    | Sloan and the Hollow Prince | `#070c0a` | `#123128` | `#5fcf9f` |
    | Victor and Sophia | `#0d0708` | `#3a0f1e` | `#d9668c` |
